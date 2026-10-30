@@ -420,57 +420,79 @@ ApplicationWindow {
 
                         RowLayout {
                             Layout.fillWidth: true
-                            spacing: 8
+                            spacing: 10
                             Text { text: "Command A:"; font.bold: true; font.pixelSize: 12; Layout.preferredWidth: 95; color: blazeOrange }
+
+                            // Kotak Input Tunggal dengan Tombol Paste di Bagian Dalam Kanan
                             Rectangle {
-                                Layout.fillWidth: true; height: 34; radius: 6; color: bgInput; border.color: borderMuted
+                                Layout.fillWidth: true
+                                height: 36
+                                radius: 6
+                                color: bgInput
+                                border.color: inputCmdA.activeFocus ? blazeOrange : borderMuted
+                                border.width: inputCmdA.activeFocus ? 1.5 : 1
+                                clip: true
+
                                 TextInput {
                                     id: inputCmdA
-                                    anchors.fill: parent; anchors.margins: 6
+                                    anchors.left: parent.left
+                                    anchors.right: btnPasteA.left
+                                    anchors.top: parent.top
+                                    anchors.bottom: parent.bottom
+                                    anchors.leftMargin: 10
+                                    anchors.rightMargin: 6
                                     verticalAlignment: TextInput.AlignVCenter
                                     color: textPrimary; font.pixelSize: 11; font.family: "Consolas, monospace"
                                     selectByMouse: true
+                                    clip: true
+
                                     Text {
                                         text: "Tempel hasil F3 + C lemparan pertama di sini..."
                                         color: "#475569"; font.pixelSize: 11; visible: !inputCmdA.text
-                                        anchors.verticalCenter: parent.verticalCenter; anchors.left: parent.left; anchors.leftMargin: 6
+                                        anchors.verticalCenter: parent.verticalCenter
                                     }
                                     onTextChanged: parseF3Command(text, 1)
                                 }
-                            }
 
-                            // Tombol Shortcut Paste Command A
-                            Rectangle {
-                                Layout.preferredWidth: 85; height: 34; radius: 6
-                                color: pasteBtnAHover.hovered ? "#3B1E0A" : "#1F1208"
-                                border.color: pasteBtnAHover.hovered ? "#FDBA74" : blazeOrange
-                                border.width: 1
+                                // Tombol Paste di Dalam Input Box (Sebelah Kanan)
+                                Rectangle {
+                                    id: btnPasteA
+                                    anchors.right: parent.right
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    anchors.rightMargin: 5
+                                    width: 72
+                                    height: 26
+                                    radius: 4
+                                    color: pasteBtnAHover.hovered ? "#3B1E0A" : "#231408"
+                                    border.color: pasteBtnAHover.hovered ? "#FDBA74" : blazeOrange
+                                    border.width: 1
 
-                                RowLayout {
-                                    anchors.centerIn: parent
-                                    spacing: 6
-                                    Image {
-                                        source: "assets/clipboard-solid-full.svg"
-                                        width: 13; height: 13
-                                        sourceSize.width: 26; sourceSize.height: 26
-                                        fillMode: Image.PreserveAspectFit
+                                    RowLayout {
+                                        anchors.centerIn: parent
+                                        spacing: 5
+                                        Image {
+                                            source: "assets/clipboard-solid-full.svg"
+                                            width: 11; height: 11
+                                            sourceSize.width: 22; sourceSize.height: 22
+                                            fillMode: Image.PreserveAspectFit
+                                        }
+                                        Text {
+                                            text: "Paste"
+                                            font.bold: true
+                                            font.pixelSize: 11
+                                            color: blazeOrange
+                                        }
                                     }
-                                    Text {
-                                        text: "Paste"
-                                        font.bold: true
-                                        font.pixelSize: 11
-                                        color: blazeOrange
-                                    }
-                                }
 
-                                HoverHandler { id: pasteBtnAHover; cursorShape: Qt.PointingHandCursor }
-                                TapHandler {
-                                    onTapped: {
-                                        if (typeof Clipboard !== "undefined") {
-                                            var clipText = Clipboard.getText();
-                                            if (clipText && clipText.trim().length > 0) {
-                                                inputCmdA.text = clipText.trim();
-                                                parseF3Command(clipText.trim(), 1);
+                                    HoverHandler { id: pasteBtnAHover; cursorShape: Qt.PointingHandCursor }
+                                    TapHandler {
+                                        onTapped: {
+                                            if (typeof Clipboard !== "undefined") {
+                                                var clipText = Clipboard.getText();
+                                                if (clipText && clipText.trim().length > 0) {
+                                                    inputCmdA.text = clipText.trim();
+                                                    parseF3Command(clipText.trim(), 1);
+                                                }
                                             }
                                         }
                                     }
@@ -480,57 +502,79 @@ ApplicationWindow {
 
                         RowLayout {
                             Layout.fillWidth: true
-                            spacing: 8
+                            spacing: 10
                             Text { text: "Command B:"; font.bold: true; font.pixelSize: 12; Layout.preferredWidth: 95; color: enderCyan }
+
+                            // Kotak Input Tunggal dengan Tombol Paste di Bagian Dalam Kanan
                             Rectangle {
-                                Layout.fillWidth: true; height: 34; radius: 6; color: bgInput; border.color: borderMuted
+                                Layout.fillWidth: true
+                                height: 36
+                                radius: 6
+                                color: bgInput
+                                border.color: inputCmdB.activeFocus ? enderCyan : borderMuted
+                                border.width: inputCmdB.activeFocus ? 1.5 : 1
+                                clip: true
+
                                 TextInput {
                                     id: inputCmdB
-                                    anchors.fill: parent; anchors.margins: 6
+                                    anchors.left: parent.left
+                                    anchors.right: btnPasteB.left
+                                    anchors.top: parent.top
+                                    anchors.bottom: parent.bottom
+                                    anchors.leftMargin: 10
+                                    anchors.rightMargin: 6
                                     verticalAlignment: TextInput.AlignVCenter
                                     color: textPrimary; font.pixelSize: 11; font.family: "Consolas, monospace"
                                     selectByMouse: true
+                                    clip: true
+
                                     Text {
                                         text: "Tempel hasil F3 + C lemparan kedua di sini..."
                                         color: "#475569"; font.pixelSize: 11; visible: !inputCmdB.text
-                                        anchors.verticalCenter: parent.verticalCenter; anchors.left: parent.left; anchors.leftMargin: 6
+                                        anchors.verticalCenter: parent.verticalCenter
                                     }
                                     onTextChanged: parseF3Command(text, 2)
                                 }
-                            }
 
-                            // Tombol Shortcut Paste Command B
-                            Rectangle {
-                                Layout.preferredWidth: 85; height: 34; radius: 6
-                                color: pasteBtnBHover.hovered ? "#0A2F2B" : "#061F1C"
-                                border.color: pasteBtnBHover.hovered ? "#67E8F9" : enderCyan
-                                border.width: 1
+                                // Tombol Paste di Dalam Input Box (Sebelah Kanan)
+                                Rectangle {
+                                    id: btnPasteB
+                                    anchors.right: parent.right
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    anchors.rightMargin: 5
+                                    width: 72
+                                    height: 26
+                                    radius: 4
+                                    color: pasteBtnBHover.hovered ? "#0A2F2B" : "#041F1B"
+                                    border.color: pasteBtnBHover.hovered ? "#67E8F9" : enderCyan
+                                    border.width: 1
 
-                                RowLayout {
-                                    anchors.centerIn: parent
-                                    spacing: 6
-                                    Image {
-                                        source: "assets/clipboard-solid-full.svg"
-                                        width: 13; height: 13
-                                        sourceSize.width: 26; sourceSize.height: 26
-                                        fillMode: Image.PreserveAspectFit
+                                    RowLayout {
+                                        anchors.centerIn: parent
+                                        spacing: 5
+                                        Image {
+                                            source: "assets/clipboard-solid-full.svg"
+                                            width: 11; height: 11
+                                            sourceSize.width: 22; sourceSize.height: 22
+                                            fillMode: Image.PreserveAspectFit
+                                        }
+                                        Text {
+                                            text: "Paste"
+                                            font.bold: true
+                                            font.pixelSize: 11
+                                            color: enderCyan
+                                        }
                                     }
-                                    Text {
-                                        text: "Paste"
-                                        font.bold: true
-                                        font.pixelSize: 11
-                                        color: enderCyan
-                                    }
-                                }
 
-                                HoverHandler { id: pasteBtnBHover; cursorShape: Qt.PointingHandCursor }
-                                TapHandler {
-                                    onTapped: {
-                                        if (typeof Clipboard !== "undefined") {
-                                            var clipText = Clipboard.getText();
-                                            if (clipText && clipText.trim().length > 0) {
-                                                inputCmdB.text = clipText.trim();
-                                                parseF3Command(clipText.trim(), 2);
+                                    HoverHandler { id: pasteBtnBHover; cursorShape: Qt.PointingHandCursor }
+                                    TapHandler {
+                                        onTapped: {
+                                            if (typeof Clipboard !== "undefined") {
+                                                var clipText = Clipboard.getText();
+                                                if (clipText && clipText.trim().length > 0) {
+                                                    inputCmdB.text = clipText.trim();
+                                                    parseF3Command(clipText.trim(), 2);
+                                                }
                                             }
                                         }
                                     }

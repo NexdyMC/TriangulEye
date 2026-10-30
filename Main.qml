@@ -75,6 +75,19 @@ ApplicationWindow {
 
     Component.onCompleted: calculateStronghold()
 
+    // Shortcut Keyboard
+    Shortcut {
+        sequence: "Return"
+        onActivated: calculateStronghold()
+    }
+    Shortcut {
+        sequence: "Ctrl+Return"
+        onActivated: {
+            controller.reset();
+            radarCanvas.requestPaint();
+        }
+    }
+
     // Background Utama
     Rectangle {
         anchors.fill: parent
@@ -263,31 +276,46 @@ ApplicationWindow {
                             Rectangle {
                                 Layout.fillWidth: true; height: 34; radius: 6; color: bgInput; border.color: borderMuted
                                 TextInput {
+                                    id: inputT1X
                                     anchors.fill: parent; anchors.margins: 6
                                     verticalAlignment: TextInput.AlignVCenter; horizontalAlignment: TextInput.AlignHCenter
                                     color: textPrimary; font.pixelSize: 12; font.family: "Consolas, monospace"
                                     text: window.t1X.toFixed(1)
                                     onTextEdited: { var v = parseFloat(text); if (!isNaN(v)) controller.t1X = v }
+                                    Connections {
+                                        target: window
+                                        function onT1XChanged() { if (!inputT1X.activeFocus) inputT1X.text = window.t1X.toFixed(1) }
+                                    }
                                 }
                             }
                             Rectangle {
                                 Layout.fillWidth: true; height: 34; radius: 6; color: bgInput; border.color: borderMuted
                                 TextInput {
+                                    id: inputT1Z
                                     anchors.fill: parent; anchors.margins: 6
                                     verticalAlignment: TextInput.AlignVCenter; horizontalAlignment: TextInput.AlignHCenter
                                     color: textPrimary; font.pixelSize: 12; font.family: "Consolas, monospace"
                                     text: window.t1Z.toFixed(1)
                                     onTextEdited: { var v = parseFloat(text); if (!isNaN(v)) controller.t1Z = v }
+                                    Connections {
+                                        target: window
+                                        function onT1ZChanged() { if (!inputT1Z.activeFocus) inputT1Z.text = window.t1Z.toFixed(1) }
+                                    }
                                 }
                             }
                             Rectangle {
                                 Layout.fillWidth: true; height: 34; radius: 6; color: bgInput; border.color: blazeOrange
                                 TextInput {
+                                    id: inputT1Yaw
                                     anchors.fill: parent; anchors.margins: 6
                                     verticalAlignment: TextInput.AlignVCenter; horizontalAlignment: TextInput.AlignHCenter
                                     color: blazeOrange; font.bold: true; font.pixelSize: 12; font.family: "Consolas, monospace"
                                     text: window.t1Yaw.toFixed(1)
                                     onTextEdited: { var v = parseFloat(text); if (!isNaN(v)) controller.t1Yaw = v }
+                                    Connections {
+                                        target: window
+                                        function onT1YawChanged() { if (!inputT1Yaw.activeFocus) inputT1Yaw.text = window.t1Yaw.toFixed(1) }
+                                    }
                                 }
                             }
 
@@ -300,31 +328,46 @@ ApplicationWindow {
                             Rectangle {
                                 Layout.fillWidth: true; height: 34; radius: 6; color: bgInput; border.color: borderMuted
                                 TextInput {
+                                    id: inputT2X
                                     anchors.fill: parent; anchors.margins: 6
                                     verticalAlignment: TextInput.AlignVCenter; horizontalAlignment: TextInput.AlignHCenter
                                     color: textPrimary; font.pixelSize: 12; font.family: "Consolas, monospace"
                                     text: window.t2X.toFixed(1)
                                     onTextEdited: { var v = parseFloat(text); if (!isNaN(v)) controller.t2X = v }
+                                    Connections {
+                                        target: window
+                                        function onT2XChanged() { if (!inputT2X.activeFocus) inputT2X.text = window.t2X.toFixed(1) }
+                                    }
                                 }
                             }
                             Rectangle {
                                 Layout.fillWidth: true; height: 34; radius: 6; color: bgInput; border.color: borderMuted
                                 TextInput {
+                                    id: inputT2Z
                                     anchors.fill: parent; anchors.margins: 6
                                     verticalAlignment: TextInput.AlignVCenter; horizontalAlignment: TextInput.AlignHCenter
                                     color: textPrimary; font.pixelSize: 12; font.family: "Consolas, monospace"
                                     text: window.t2Z.toFixed(1)
                                     onTextEdited: { var v = parseFloat(text); if (!isNaN(v)) controller.t2Z = v }
+                                    Connections {
+                                        target: window
+                                        function onT2ZChanged() { if (!inputT2Z.activeFocus) inputT2Z.text = window.t2Z.toFixed(1) }
+                                    }
                                 }
                             }
                             Rectangle {
                                 Layout.fillWidth: true; height: 34; radius: 6; color: bgInput; border.color: enderCyan
                                 TextInput {
+                                    id: inputT2Yaw
                                     anchors.fill: parent; anchors.margins: 6
                                     verticalAlignment: TextInput.AlignVCenter; horizontalAlignment: TextInput.AlignHCenter
                                     color: enderCyan; font.bold: true; font.pixelSize: 12; font.family: "Consolas, monospace"
                                     text: window.t2Yaw.toFixed(1)
                                     onTextEdited: { var v = parseFloat(text); if (!isNaN(v)) controller.t2Yaw = v }
+                                    Connections {
+                                        target: window
+                                        function onT2YawChanged() { if (!inputT2Yaw.activeFocus) inputT2Yaw.text = window.t2Yaw.toFixed(1) }
+                                    }
                                 }
                             }
                         }
@@ -350,7 +393,7 @@ ApplicationWindow {
                                         sourceSize.width: 28; sourceSize.height: 28
                                         fillMode: Image.PreserveAspectFit
                                     }
-                                    Text { text: "Enter (Hitung)"; font.bold: true; font.pixelSize: 12; color: "#042F2E" }
+                                    Text { text: "Hitung (Auto)"; font.bold: true; font.pixelSize: 12; color: "#042F2E" }
                                 }
                                 HoverHandler { cursorShape: Qt.PointingHandCursor }
                                 TapHandler { onTapped: calculateStronghold() }
@@ -770,35 +813,53 @@ ApplicationWindow {
                             ctx.fillText("West (-X)", westX, Math.max(14, Math.min(h - 6, cy - 6)));
                             ctx.fillText("East (+X)", eastX, Math.max(14, Math.min(h - 6, cy - 6)));
 
-                            // 4. Vektor Lemparan Ender Eye 1 & 2
+                            // 4. Vektor Lemparan Ender Eye 1 & 2 serta Garis Perpotongan
                             var p1x = cx + (window.t1X * s);
                             var p1y = cy + (window.t1Z * s);
                             var p2x = cx + (window.t2X * s);
                             var p2y = cy + (window.t2Z * s);
 
-                            var rayLen = Math.max(w, h) * 3;
+                            var rayLen = Math.max(w, h, 800) * 3;
 
-                            var rad1 = (window.t1Yaw * Math.PI) / 180.0;
-                            var dx1 = -Math.sin(rad1);
-                            var dz1 = Math.cos(rad1);
-                            ctx.strokeStyle = window.blazeOrange;
-                            ctx.lineWidth = 2;
-                            ctx.beginPath(); ctx.moveTo(p1x, p1y); ctx.lineTo(p1x + (dx1 * rayLen), p1y + (dz1 * rayLen)); ctx.stroke();
-                            ctx.fillStyle = window.blazeOrange; ctx.beginPath(); ctx.arc(p1x, p1y, 4.5, 0, 2 * Math.PI); ctx.fill();
-
-                            var rad2 = (window.t2Yaw * Math.PI) / 180.0;
-                            var dx2 = -Math.sin(rad2);
-                            var dz2 = Math.cos(rad2);
-                            ctx.strokeStyle = window.enderCyan;
-                            ctx.lineWidth = 2;
-                            ctx.beginPath(); ctx.moveTo(p2x, p2y); ctx.lineTo(p2x + (dx2 * rayLen), p2y + (dz2 * rayLen)); ctx.stroke();
-                            ctx.fillStyle = window.enderCyan; ctx.beginPath(); ctx.arc(p2x, p2y, 4.5, 0, 2 * Math.PI); ctx.fill();
-
-                            // 5. Target Stronghold Terhitung
                             if (window.isCalculated) {
                                 var sx = cx + (window.overworldBlockX * s);
                                 var sy = cy + (window.overworldBlockZ * s);
 
+                                // Garis 1: Membentang dari Eye 1, menembus Stronghold, dan memanjang melewatinya
+                                var v1x = sx - p1x;
+                                var v1y = sy - p1y;
+                                var d1 = Math.sqrt(v1x * v1x + v1y * v1y);
+                                if (d1 > 0.001) {
+                                    var u1x = v1x / d1;
+                                    var u1y = v1y / d1;
+                                    var extLen1 = Math.max(w, h, 600);
+
+                                    ctx.strokeStyle = window.blazeOrange;
+                                    ctx.lineWidth = 2;
+                                    ctx.beginPath();
+                                    ctx.moveTo(p1x - (u1x * 80), p1y - (u1y * 80));
+                                    ctx.lineTo(sx + (u1x * extLen1), sy + (u1y * extLen1));
+                                    ctx.stroke();
+                                }
+
+                                // Garis 2: Membentang dari Eye 2, menembus Stronghold, dan memanjang melewatinya
+                                var v2x = sx - p2x;
+                                var v2y = sy - p2y;
+                                var d2 = Math.sqrt(v2x * v2x + v2y * v2y);
+                                if (d2 > 0.001) {
+                                    var u2x = v2x / d2;
+                                    var u2y = v2y / d2;
+                                    var extLen2 = Math.max(w, h, 600);
+
+                                    ctx.strokeStyle = window.enderCyan;
+                                    ctx.lineWidth = 2;
+                                    ctx.beginPath();
+                                    ctx.moveTo(p2x - (u2x * 80), p2y - (u2y * 80));
+                                    ctx.lineTo(sx + (u2x * extLen2), sy + (u2y * extLen2));
+                                    ctx.stroke();
+                                }
+
+                                // 5. Visualisasi Target Stronghold di Titik Perpotongan (Intersection)
                                 var chunkX = cx + (window.overworldChunkX * 16 * s);
                                 var chunkZ = cy + (window.overworldChunkZ * 16 * s);
                                 var chunkSize = Math.max(4, 16 * s);
@@ -809,18 +870,51 @@ ApplicationWindow {
                                 ctx.fillStyle = "#334ADE80";
                                 ctx.fillRect(chunkX, chunkZ, chunkSize, chunkSize);
 
+                                // Lingkaran Target Perpotongan
                                 ctx.strokeStyle = window.eyeGreen;
                                 ctx.lineWidth = 2;
                                 ctx.beginPath(); ctx.arc(sx, sy, 6, 0, 2 * Math.PI); ctx.stroke();
 
                                 ctx.strokeStyle = "#86EFAC";
                                 ctx.lineWidth = 1;
-                                ctx.beginPath(); ctx.arc(sx, sy, 11, 0, 2 * Math.PI); ctx.stroke();
+                                ctx.beginPath(); ctx.arc(sx, sy, 12, 0, 2 * Math.PI); ctx.stroke();
 
                                 ctx.fillStyle = "#FFFFFF";
                                 ctx.font = "bold 11px sans-serif";
-                                ctx.fillText("★ Stronghold [" + window.overworldBlockX + ", " + window.overworldBlockZ + "]", sx + 14, sy - 4);
+                                ctx.fillText("★ Stronghold [" + window.overworldBlockX + ", " + window.overworldBlockZ + "]", sx + 16, sy - 4);
+                            } else {
+                                // Jika belum terhitung: gambar garis sesuai sudut yaw
+                                var rad1 = (window.t1Yaw * Math.PI) / 180.0;
+                                var dx1 = -Math.sin(rad1);
+                                var dz1 = Math.cos(rad1);
+                                ctx.strokeStyle = window.blazeOrange;
+                                ctx.lineWidth = 2;
+                                ctx.beginPath();
+                                ctx.moveTo(p1x - (dx1 * rayLen), p1y - (dz1 * rayLen));
+                                ctx.lineTo(p1x + (dx1 * rayLen), p1y + (dz1 * rayLen));
+                                ctx.stroke();
+
+                                var rad2 = (window.t2Yaw * Math.PI) / 180.0;
+                                var dx2 = -Math.sin(rad2);
+                                var dz2 = Math.cos(rad2);
+                                ctx.strokeStyle = window.enderCyan;
+                                ctx.lineWidth = 2;
+                                ctx.beginPath();
+                                ctx.moveTo(p2x - (dx2 * rayLen), p2y - (dz2 * rayLen));
+                                ctx.lineTo(p2x + (dx2 * rayLen), p2y + (dz2 * rayLen));
+                                ctx.stroke();
                             }
+
+                            // Titik Lemparan Eye 1 (Oranye) & Eye 2 (Cyan)
+                            ctx.fillStyle = window.blazeOrange;
+                            ctx.beginPath(); ctx.arc(p1x, p1y, 5, 0, 2 * Math.PI); ctx.fill();
+                            ctx.fillStyle = "#FFFFFF"; ctx.font = "bold 9px sans-serif";
+                            ctx.fillText("Eye 1", p1x + 8, p1y + 3);
+
+                            ctx.fillStyle = window.enderCyan;
+                            ctx.beginPath(); ctx.arc(p2x, p2y, 5, 0, 2 * Math.PI); ctx.fill();
+                            ctx.fillStyle = "#FFFFFF"; ctx.font = "bold 9px sans-serif";
+                            ctx.fillText("Eye 2", p2x + 8, p2y + 3);
                         }
 
                         onWidthChanged: requestPaint()

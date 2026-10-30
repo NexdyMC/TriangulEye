@@ -1,0 +1,12 @@
+# Build & IDE files
+build/
+.qtcreator/
+*.user
+*.user.*
+
+# Compiled binaries
+*.exe
+*.obj
+*.o
+*.a
+*.dll

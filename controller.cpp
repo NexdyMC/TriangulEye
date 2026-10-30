@@ -18,6 +18,7 @@ void Controller::setT1X(double v)
     if (!qFuzzyCompare(m_t1X, v)) {
         m_t1X = v;
         emit t1XChanged();
+        calculateStronghold();
     }
 }
 
@@ -26,6 +27,7 @@ void Controller::setT1Z(double v)
     if (!qFuzzyCompare(m_t1Z, v)) {
         m_t1Z = v;
         emit t1ZChanged();
+        calculateStronghold();
     }
 }
 
@@ -34,6 +36,7 @@ void Controller::setT1Yaw(double v)
     if (!qFuzzyCompare(m_t1Yaw, v)) {
         m_t1Yaw = v;
         emit t1YawChanged();
+        calculateStronghold();
     }
 }
 
@@ -42,6 +45,7 @@ void Controller::setT2X(double v)
     if (!qFuzzyCompare(m_t2X, v)) {
         m_t2X = v;
         emit t2XChanged();
+        calculateStronghold();
     }
 }
 
@@ -50,6 +54,7 @@ void Controller::setT2Z(double v)
     if (!qFuzzyCompare(m_t2Z, v)) {
         m_t2Z = v;
         emit t2ZChanged();
+        calculateStronghold();
     }
 }
 
@@ -58,6 +63,7 @@ void Controller::setT2Yaw(double v)
     if (!qFuzzyCompare(m_t2Yaw, v)) {
         m_t2Yaw = v;
         emit t2YawChanged();
+        calculateStronghold();
     }
 }
 
@@ -100,6 +106,13 @@ void Controller::calculateStronghold()
         m_netherInChunkZ = 0;
         m_distanceBlocks = 0.0;
         m_netherSavedBlocks = 0;
+        emit resultsChanged();
+        return;
+    }
+
+    if (qFuzzyCompare(m_t1X, m_t2X) && qFuzzyCompare(m_t1Z, m_t2Z) && qFuzzyCompare(m_t1Yaw, m_t2Yaw)) {
+        m_isCalculated = false;
+        m_calcError = QStringLiteral("⚠️ Masukkan 2 posisi lemparan yang berbeda.");
         emit resultsChanged();
         return;
     }

@@ -668,14 +668,14 @@ ApplicationWindow {
                         anchors.fill: parent
 
                         readonly property var strongholdRings: [
-                            { name: "Ring 1", count: 3,  minR: 1280,  maxR: 2816,  color: "#38BDF8" },
-                            { name: "Ring 2", count: 6,  minR: 4352,  maxR: 5888,  color: "#818CF8" },
-                            { name: "Ring 3", count: 10, minR: 7424,  maxR: 8960,  color: "#A78BFA" },
-                            { name: "Ring 4", count: 15, minR: 10496, maxR: 12032, color: "#C084FC" },
-                            { name: "Ring 5", count: 21, minR: 13568, maxR: 15104, color: "#E879F9" },
-                            { name: "Ring 6", count: 28, minR: 16640, maxR: 18176, color: "#F472B6" },
-                            { name: "Ring 7", count: 36, minR: 19712, maxR: 21248, color: "#FB7185" },
-                            { name: "Ring 8", count: 9,  minR: 22784, maxR: 24320, color: "#FBBF24" }
+                            { name: "Ring 1", count: 3,  minR: 1280,  maxR: 2816,  stroke: "rgba(0, 245, 212, 0.45)", fill: "rgba(0, 245, 212, 0.05)", text: "#00F5D4" }, // Neon Ender Cyan
+                            { name: "Ring 2", count: 6,  minR: 4352,  maxR: 5888,  stroke: "rgba(56, 189, 248, 0.40)", fill: "rgba(56, 189, 248, 0.04)", text: "#38BDF8" }, // Sky Blue
+                            { name: "Ring 3", count: 10, minR: 7424,  maxR: 8960,  stroke: "rgba(99, 102, 241, 0.35)", fill: "rgba(99, 102, 241, 0.03)", text: "#818CF8" }, // Indigo
+                            { name: "Ring 4", count: 15, minR: 10496, maxR: 12032, stroke: "rgba(139, 92, 246, 0.35)", fill: "rgba(139, 92, 246, 0.03)", text: "#A78BFA" }, // Purple
+                            { name: "Ring 5", count: 21, minR: 13568, maxR: 15104, stroke: "rgba(168, 85, 247, 0.35)", fill: "rgba(168, 85, 247, 0.03)", text: "#C084FC" }, // Violet
+                            { name: "Ring 6", count: 28, minR: 16640, maxR: 18176, stroke: "rgba(192, 132, 252, 0.35)", fill: "rgba(192, 132, 252, 0.03)", text: "#D8B4FE" }, // Lavender
+                            { name: "Ring 7", count: 36, minR: 19712, maxR: 21248, stroke: "rgba(147, 197, 253, 0.35)", fill: "rgba(147, 197, 253, 0.03)", text: "#93C5FD" }, // Soft Blue
+                            { name: "Ring 8", count: 9,  minR: 22784, maxR: 24320, stroke: "rgba(94, 234, 212, 0.35)", fill: "rgba(94, 234, 212, 0.03)", text: "#5EEAD4" }  // Teal Cyan
                         ]
 
                         onPaint: {
@@ -708,37 +708,38 @@ ApplicationWindow {
                             for (var y = startY; y < h; y += pxStep) { ctx.moveTo(0, y); ctx.lineTo(w, y); }
                             ctx.stroke();
 
-                            // 2. Lingkaran 8 Ring Stronghold
+                            // 2. Lingkaran 8 Ring Stronghold (Tema Ender Void Neon)
                             for (var rIdx = 0; rIdx < strongholdRings.length; ++rIdx) {
                                 var ring = strongholdRings[rIdx];
                                 var rIn = ring.minR * s;
                                 var rOut = ring.maxR * s;
 
                                 if (rOut > 2 && rIn < Math.max(w, h) * 3) {
-                                    // Arsiran Ring Band Lembut
-                                    ctx.save();
-                                    ctx.beginPath();
-                                    ctx.arc(cx, cy, rOut, 0, Math.PI * 2, false);
-                                    ctx.arc(cx, cy, rIn, 0, Math.PI * 2, true);
-                                    ctx.closePath();
-                                    ctx.fillStyle = ring.color + "14";
-                                    ctx.fill();
-                                    ctx.restore();
+                                    var bandThickness = rOut - rIn;
+                                    var rMid = (rIn + rOut) / 2;
 
-                                    // Batas Dalam & Luar Lingkaran
-                                    ctx.strokeStyle = ring.color + "55";
-                                    ctx.lineWidth = 1;
+                                    // Arsiran Pita Lingkaran Halus (Stroke Band Bebas Bug)
+                                    if (bandThickness > 1) {
+                                        ctx.strokeStyle = ring.fill;
+                                        ctx.lineWidth = bandThickness;
+                                        ctx.beginPath();
+                                        ctx.arc(cx, cy, rMid, 0, Math.PI * 2);
+                                        ctx.stroke();
+                                    }
+
+                                    // Garis Lingkaran Batas Dalam & Luar
+                                    ctx.strokeStyle = ring.stroke;
+                                    ctx.lineWidth = (rIdx === 0) ? 1.5 : 1.0;
                                     ctx.beginPath(); ctx.arc(cx, cy, rIn, 0, Math.PI * 2); ctx.stroke();
                                     ctx.beginPath(); ctx.arc(cx, cy, rOut, 0, Math.PI * 2); ctx.stroke();
 
                                     // Label Nama Ring
                                     var labelAngle = -Math.PI / 4;
-                                    var labelR = (rIn + rOut) / 2;
-                                    var lx = cx + Math.cos(labelAngle) * labelR;
-                                    var ly = cy + Math.sin(labelAngle) * labelR;
-                                    if (lx > 10 && lx < w - 90 && ly > 20 && ly < h - 20 && (rOut - rIn) > 10) {
+                                    var lx = cx + Math.cos(labelAngle) * rMid;
+                                    var ly = cy + Math.sin(labelAngle) * rMid;
+                                    if (lx > 10 && lx < w - 90 && ly > 20 && ly < h - 20 && bandThickness > 8) {
                                         ctx.font = "bold 9px Consolas, sans-serif";
-                                        ctx.fillStyle = ring.color;
+                                        ctx.fillStyle = ring.text;
                                         ctx.fillText(ring.name + " (" + ring.count + " SH)", lx, ly);
                                     }
                                 }
